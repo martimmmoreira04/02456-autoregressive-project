@@ -244,3 +244,8 @@ tests/
 .DS_Store
 
 .vscode/
+
+
+
+# personal folders
+frederik/*
