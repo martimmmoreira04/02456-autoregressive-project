@@ -8,7 +8,7 @@ class SinusoidPositionalEncoding(nn.Module): # https://medium.com/@uzbrainai/tra
     def __init__(
               self, 
               token_dim, 
-              max_len=130):
+              max_len=129):
         
         super().__init__()
         pe = torch.zeros(max_len, token_dim)
@@ -34,11 +34,11 @@ class Transformer(nn.Module):
         self.vocabulary_size = vocabulary_size
         self.sinusoid_positional_encoding = SinusoidPositionalEncoding(token_dim=embedding_dim)    
         self.embedding = nn.Embedding(vocabulary_size, embedding_dim, padding_idx=padding_idx)
-        encoder_layers = nn.TransformerEncoderLayer(d_model=embedding_dim, nhead=num_heads, dim_feedforward=embedding_dim * 4, batch_first=True,
+        encoder_layer = nn.TransformerEncoderLayer(d_model=embedding_dim, nhead=num_heads, dim_feedforward=embedding_dim * 4, batch_first=True,
             norm_first = True, #before LN - but check this 
             activation = "relu", #we need to test if this is the best activation function for our use case
             )   
-        self.encoder = nn.TransformerEncoder(encoder_layers, norm=nn.LayerNorm(embedding_dim), num_layers=num_layers)
+        self.encoder = nn.TransformerEncoder(encoder_layer, norm=nn.LayerNorm(embedding_dim), num_layers=num_layers)
         self.output_layer = nn.Linear(embedding_dim, vocabulary_size)
 
 
@@ -50,12 +50,12 @@ class Transformer(nn.Module):
         x = self.embedding(x)   #pe[:T]
         x = self.sinusoid_positional_encoding(x)
         x = self.encoder(x, mask=causal_mask, src_key_padding_mask=padding_mask, is_causal=True)
-        x = self.output_layer(x)    
+        x = self.output_layer(x)
         return x
 
 if __name__ == "__main__":
     m = Transformer(num_heads=4, num_layers=2, vocabulary_size=23, embedding_dim=24)
-    x = torch.randint(1, 23, (4, 130))
+    x = torch.randint(1, 23, (4, 129))
     x[:, 100:] = 0
     out = m(x)
     print(out.shape)
