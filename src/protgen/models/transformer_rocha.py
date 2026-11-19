@@ -8,7 +8,7 @@ class SinusoidPositionalEncoding(nn.Module): # https://medium.com/@uzbrainai/tra
     def __init__(
               self, 
               token_dim, 
-              max_len=132):
+              max_len=130):
         
         super().__init__()
         pe = torch.zeros(max_len, token_dim)
@@ -55,7 +55,7 @@ class Transformer(nn.Module):
 
 if __name__ == "__main__":
     m = Transformer(num_heads=4, num_layers=2, vocabulary_size=23, embedding_dim=24)
-    x = torch.randint(1, 23, (4, 132))
+    x = torch.randint(1, 23, (4, 130))
     x[:, 100:] = 0
     out = m(x)
     print(out.shape)
