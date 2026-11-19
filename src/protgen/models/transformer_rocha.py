@@ -55,11 +55,3 @@ class Transformer(nn.Module):
         if return_hidden:
             return logits, h
         return logits 
-
-
-if __name__ == "__main__":
-    m = Transformer(num_heads=4, num_layers=2, vocabulary_size=23, embedding_size=24)
-    x = torch.randint(1, 23, (4, 129))
-    x[:, 100:] = 0
-    out = m(x)
-    print(out.shape)
