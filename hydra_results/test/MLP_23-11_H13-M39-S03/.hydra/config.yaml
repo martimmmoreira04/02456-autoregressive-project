@@ -1,0 +1,4 @@
+weights: hydra_results/training/MLP_train_sweep_11-23_12-26-09/256/adam_001/weights/epoch_10.pt
+hardware: mps
+test_data: data/test.csv
+batch_size: 32

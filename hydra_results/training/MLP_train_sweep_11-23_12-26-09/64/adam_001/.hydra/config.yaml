@@ -1,0 +1,29 @@
+model_layout:
+  num_hidden: 64
+training_parameters:
+  epochs: 20
+  batch_size: 32
+  seed: 42
+  optimizer: ${Hyper[${training_parameters.hyper_run}].optimizer}
+  lr: ${Hyper[${training_parameters.hyper_run}].lr}
+  hyper_run: adam_001
+hardware: mps
+Hyper:
+  sgd_001:
+    optimizer: SGD
+    lr: 0.01
+  sgd_005:
+    optimizer: SGD
+    lr: 0.05
+  sgd_01:
+    optimizer: SGD
+    lr: 0.1
+  adam_0003:
+    optimizer: Adam
+    lr: 0.0003
+  adam_001:
+    optimizer: Adam
+    lr: 0.001
+  adam_003:
+    optimizer: Adam
+    lr: 0.003

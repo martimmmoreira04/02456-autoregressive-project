@@ -1,0 +1,2 @@
+- +training_parameters.hyper_run=adam_003
+- model_layout.num_hidden=256
