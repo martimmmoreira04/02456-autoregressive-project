@@ -1,6 +1,6 @@
 hydra:
   run:
-    dir: hydra_results/generation/${now:%d/%m_H%H-M%M-S%S}
+    dir: hydra_results/generation/MLP/${now:%d-%m_H%H-M%M-S%S}
   sweep:
     dir: multirun/${now:%Y-%m-%d}/${now:%H-%M-%S}
     subdir: ${hydra.job.num}
@@ -140,7 +140,7 @@ hydra:
     - path: ''
       schema: structured
       provider: schema
-    output_dir: /Users/frederikallinghamdecordier/Documents/DTU/Kurser/Deep learning/Project/02456-autoregressive-project/hydra_results/generation/23/11_H13-M56-S07
+    output_dir: /Users/frederikallinghamdecordier/Documents/DTU/Kurser/Deep learning/Project/02456-autoregressive-project/hydra_results/generation/MLP/23-11_H14-M17-S32
     choices:
       hydra/env: default
       hydra/callbacks: null
