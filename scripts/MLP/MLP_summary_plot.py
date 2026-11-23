@@ -19,5 +19,5 @@ val_summary.plot(x = "epoch")
 val_summary.plot(x="epoch", figsize=(12, 6))  # size of the whole image
 plt.subplots_adjust(right=0.70) 
 plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
-plt.savefig(f"{folder}/val_summary.png", dpi=150)
+plt.savefig(f"{folder}/val_summary.png", dpi=150) # dpi is for resolution
 plt.close()
