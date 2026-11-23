@@ -1,0 +1,21 @@
+# PYTHONPATH=src uv run python scripts/MLP/MLP_gen.py --config-name=MLP_gen
+# make sure the command is run from repository root!! either when done manually and when done on hpc. 
+
+# path to weights!!!
+weights: hydra_results/training/MLP_train_sweep_11-23_12-26-09/256/adam_001/weights/epoch_10.pt
+
+# specify hardware!! 
+# just so we can use the GPU's and not wait so much 
+  # 'cuda' for nvidia GPU's 
+  # 'mps' for apple 
+hardware: mps
+
+
+num_samples: 100 # how many samples to generate
+max_length: 127   # create EOS if length is 127 
+temperature: 1.0 # keep the probabilities of the saved weights. neutral at 1. 
+seed: 42 
+
+hydra:
+  run:
+    dir: hydra_results/generation/${now:%d/%m_H%H-M%M-S%S}
