@@ -9,7 +9,6 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 from protgen.data import ProteinDataset
 import pandas as pd 
-import os
 from pathlib import Path
 
 @hydra.main(
