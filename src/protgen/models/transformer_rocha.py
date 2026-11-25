@@ -27,8 +27,8 @@ class Transformer(nn.Module):
         num_layers: int,
         vocabulary_size: int,
         embedding_size: int,
-        padding_idx: int = 0):
-
+        padding_idx: int = 0, dropout: float = 0.1):
+    
         super().__init__()
         self.padding_idx = padding_idx
         self.vocabulary_size = vocabulary_size
@@ -37,7 +37,7 @@ class Transformer(nn.Module):
         encoder_layers = nn.TransformerEncoderLayer(d_model=embedding_size, nhead=num_heads, dim_feedforward=embedding_size * 4, batch_first=True,
             norm_first = True, #before LN - but check this 
             activation = "relu", #we need to test if this is the best activation function for our use case
-            )   
+            dropout = dropout)   
         self.encoder = nn.TransformerEncoder(encoder_layers, norm=nn.LayerNorm(embedding_size), num_layers=num_layers)
         self.output_layer = nn.Linear(embedding_size, vocabulary_size)
 

@@ -1,0 +1,4 @@
+- training_parameters.hyper_run=adamW_001
+- model_layout.embedding_size=128
+- model_layout.num_layers=4
+- hardware=cuda

@@ -29,7 +29,8 @@ def main(config):
 
     # SETUP
     torch.manual_seed(config.training_parameters.seed)
-    model = Transformer(vocabulary_size=23, embedding_size=config.model_layout.embedding_size,num_heads=config.model_layout.num_heads,num_layers=config.model_layout.num_layers)
+    dropout = config.model_layout.get("dropout", 0.1)
+    model = Transformer(vocabulary_size=23, embedding_size=config.model_layout.embedding_size,num_heads=config.model_layout.num_heads,num_layers=config.model_layout.num_layers, dropout=dropout)
     model.to(config.hardware)
     loss_fn = nn.CrossEntropyLoss(ignore_index=-1)
 
@@ -80,7 +81,7 @@ def main(config):
         train_losses.append(train_loss)
 
         # save weights for each epoch 
-        checkpoint = {"weights": model.state_dict(), "embedding_size": config.model_layout.embedding_size, "num_heads": config.model_layout.num_heads, "num_layers": config.model_layout.num_layers}
+        checkpoint = {"weights": model.state_dict(), "embedding_size": config.model_layout.embedding_size, "num_heads": config.model_layout.num_heads, "num_layers": config.model_layout.num_layers, "dropout": config.model_layout.dropout}
         torch.save(checkpoint, f"{output_dir}/weights/epoch_{epoch+1}.pt")
 
         # validation
@@ -98,7 +99,7 @@ def main(config):
 
     # SAVE RESULTS
     # define name and path
-    col_name = (f"emb{config.model_layout.embedding_size}" f"_h{config.model_layout.num_heads}" f"_L{config.model_layout.num_layers}" f"_{config.training_parameters.hyper_run}")
+    col_name = (f"emb{config.model_layout.embedding_size}" f"_h{config.model_layout.num_heads}" f"_L{config.model_layout.num_layers}" f"_{config.training_parameters.hyper_run}" f"_d{config.model_layout.dropout}")
     train_losses_path = f"{output_dir}/train_loss.csv"
     val_losses_path = f"{output_dir}/val_loss.csv"
     # rename col 
