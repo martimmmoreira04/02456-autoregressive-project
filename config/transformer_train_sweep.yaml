@@ -27,15 +27,15 @@ hardware: mps
 Hyper:
   sgd_001:
     optimizer: SGD
-    lr: 0.01
+    lr: 0.001
 
   sgd_005:
     optimizer: SGD
-    lr: 0.05
+    lr: 0.005
 
   sgd_01:
     optimizer: SGD
-    lr: 0.1
+    lr: 0.01
 
   #ADAM OPTIMIZERS
   adam_0003:

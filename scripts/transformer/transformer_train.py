@@ -1,3 +1,5 @@
+from networkx import config
+
 import hydra
 from hydra.core.hydra_config import HydraConfig
 
@@ -27,9 +29,8 @@ def main(config):
 
     # SETUP
     torch.manual_seed(config.training_parameters.seed)
-    model = Transformer(embedding_size=config.model_layout.embedding_size,num_heads=config.model_layout.num_heads,num_layers=config.model_layout.num_layers)
+    model = Transformer(vocabulary_size=23, embedding_size=config.model_layout.embedding_size,num_heads=config.model_layout.num_heads,num_layers=config.model_layout.num_layers)
     model.to(config.hardware)
-    vocabulary_size=23
     loss_fn = nn.CrossEntropyLoss(ignore_index=-1)
 
     # choose optimizer
@@ -79,10 +80,7 @@ def main(config):
         train_losses.append(train_loss)
 
         # save weights for each epoch 
-        checkpoint = {
-            "weights": model.state_dict(),
-            "num_hidden": config.model_layout.num_hidden,
-        }
+        checkpoint = {"weights": model.state_dict(), "embedding_size": config.model_layout.embedding_size, "num_heads": config.model_layout.num_heads, "num_layers": config.model_layout.num_layers}
         torch.save(checkpoint, f"{output_dir}/weights/epoch_{epoch+1}.pt")
 
         # validation
@@ -100,7 +98,7 @@ def main(config):
 
     # SAVE RESULTS
     # define name and path
-    col_name=f"{config.model_layout.num_hidden}_{config.training_parameters.hyper_run}"
+    col_name = (f"emb{config.model_layout.embedding_size}" f"_h{config.model_layout.num_heads}" f"_L{config.model_layout.num_layers}" f"_{config.training_parameters.hyper_run}")
     train_losses_path = f"{output_dir}/train_loss.csv"
     val_losses_path = f"{output_dir}/val_loss.csv"
     # rename col 
