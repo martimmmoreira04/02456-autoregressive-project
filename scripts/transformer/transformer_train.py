@@ -106,7 +106,7 @@ def main(config):
             "epoch": epoch + 1,
             "val_loss": val_loss,
         }
-        torch.save(checkpoint, f"{output_dir}/weights/epoch_{epoch+1}.pt")
+        # torch.save(checkpoint, f"{output_dir}/weights/epoch_{epoch+1}.pt")
         if val_loss < best_val:
             best_val = val_loss
             torch.save(checkpoint, f"{output_dir}/weights/best.pt")

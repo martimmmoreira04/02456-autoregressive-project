@@ -1,0 +1,14 @@
+# Martim R - based on the transformer_samples.py
+# PYTHONPATH=src uv run python scripts/transformer/transformer_test.py --config-name=transformer_test
+# run from the repository root!
+
+weights: weights/transformer_best.pt
+
+hardware: mps
+
+test_data: data/test.csv
+batch_size: 32
+
+hydra:
+  run:
+    dir: hydra_results/test/transformer_${now:%d-%m_H%H-M%M-S%S}
