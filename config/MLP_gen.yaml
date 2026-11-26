@@ -19,10 +19,3 @@ seed: 42
 hydra:
   run:
     dir: hydra_results/generation/MLP/${now:%d-%m_H%H-M%M-S%S}
-
-
-sample_dir=hydra_results/generation/MLP/23-11_H14-M17-S32/
-
-PYTHONPATH=src uv run python eval/eval.py \
-  --samples "${sample_dir}sequence.csv" \
-  --out "${sample_dir}evaluation"
