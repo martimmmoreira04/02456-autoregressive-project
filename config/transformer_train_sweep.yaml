@@ -1,4 +1,3 @@
-# Martim R - based on the MLP_train_sweep
 # Best model from transformer_train_sweep_11-25_19-41-41 (val loss 1.4894 @ epoch 19)
 # run with:
 #   PYTHONPATH=src uv run python scripts/transformer/transformer_train.py --config-name=transformer_best
