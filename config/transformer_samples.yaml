@@ -1,0 +1,19 @@
+# Martim R - based on the transformer_samples.py
+# PYTHONPATH=src uv run python scripts/transformer/transformer_samples.py --config-name=transformer_samples
+# run from the repository root!
+
+weights: weights/transformer_best.pt
+
+hardware: mps     # 'cuda' on HPC
+
+num_samples: 100
+max_length: 127   # longest sequence in the data
+temperature: 1.0
+seed: 42
+
+hydra:
+  run:
+    dir: hydra_results/generation/transformer/${now:%d-%m_H%H-M%M-S%S}
+  sweep:
+    dir: hydra_results/generation/transformer/${now:%d-%m_H%H-M%M-S%S}
+    subdir: T${temperature}
