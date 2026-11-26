@@ -1,0 +1,32 @@
+# Martim R - based on the MLP_train_sweep
+# run with 
+#   PYTHONPATH=src uv run python scripts/transformer/transformer_train.py --config-name=transformer_train_sweep_depth -m
+
+model_layout:
+  embedding_size: 128
+  num_heads:      4
+  num_layers:     8
+  dropout:        0.1
+
+training_parameters:
+  epochs: 60
+  batch_size: 32
+  seed: 42
+  hyper_run: adamW_003
+  optimizer: ${Hyper[${training_parameters.hyper_run}].optimizer}
+  lr:        ${Hyper[${training_parameters.hyper_run}].lr}
+
+hardware: mps
+
+Hyper:
+  adamW_003:
+    optimizer: AdamW
+    lr: 0.003
+
+hydra:
+  sweep:
+    dir: hydra_results/training/transformer_depth_${now:%m-%d_%H-%M-%S}
+    subdir: L${model_layout.num_layers}
+  sweeper:
+    params:
+      model_layout.num_layers: 8,10,12
