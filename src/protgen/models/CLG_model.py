@@ -6,7 +6,6 @@ from torch import nn
 import torch.nn.functional as F
 import math
 
-
 class SinusoidPositionalEncoding(nn.Module): # https://medium.com/@uzbrainai/transformers-and-sequence-order-sinusoidal-vs-learned-positional-embeddings-b3802df5ce24
     def __init__(
               self, 

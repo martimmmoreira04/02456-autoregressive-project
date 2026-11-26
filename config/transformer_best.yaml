@@ -1,0 +1,28 @@
+# Best model from transformer_train_sweep_11-25_19-41-41 (val loss 1.4894 @ epoch 19)
+# run with:
+#   PYTHONPATH=src uv run python scripts/transformer/transformer_train.py --config-name=transformer_best
+
+model_layout:
+  embedding_size: 128
+  num_heads:      4
+  num_layers:     4
+  dropout:        0.1
+
+training_parameters:
+  epochs: 20
+  batch_size: 32
+  seed: 42
+  hyper_run: adamW_003
+  optimizer: ${Hyper[${training_parameters.hyper_run}].optimizer}
+  lr:        ${Hyper[${training_parameters.hyper_run}].lr}
+
+hardware: mps   # 'cuda' on HPC (the winning run was on cuda)
+
+Hyper:
+  adamW_003:
+    optimizer: AdamW
+    lr: 0.003
+
+hydra:
+  run:
+    dir: hydra_results/training/transformer_best/${now:%m-%d_%H-%M-%S}

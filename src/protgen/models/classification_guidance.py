@@ -3,7 +3,7 @@ from torch import nn
 import torch.nn.functional as F
 import math
 
-from protgen.models.transformer_rocha import SinusoidalPositionalEncoding
+from protgen.models.transformer_rocha import SinusoidPositionalEncoding
 
 class FamilyClass(nn.Module):
     def __init__(
@@ -18,7 +18,7 @@ class FamilyClass(nn.Module):
         super().__init__()
         self.padding_idx = padding_idx
         self.vocabulary_size = vocabulary_size
-        self.sinusoid_positional_encoding = SinusoidalPositionalEncoding(token_dim=embedding_size)
+        self.sinusoid_positional_encoding = SinusoidPositionalEncoding(token_dim=embedding_size)
         self.embedding = nn.Embedding(vocabulary_size, embedding_size, padding_idx=padding_idx)
 
         encoder_layers = nn.TransformerEncoderLayer(d_model=embedding_size, nhead=num_heads, dim_feedforward=embedding_size * 4, batch_first=True,
