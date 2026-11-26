@@ -3,7 +3,8 @@ from torch import nn
 import torch.nn.functional as F
 import math
 
-from protgen.models.transformer_rocha import SinusoidalPositionalEncoding
+from protgen.models.transformer_rocha import SinusoidPositionalEncoding
+from protgen.models.transformer_freeze import load_frozen_transformer
 
 class FamilyClass(nn.Module):
     def __init__(
