@@ -251,3 +251,12 @@ tests/
 _frederik/
 
 
+
+# The same exception for the evaluation tables: one summary.csv per set is a few hundred bytes
+# and holds the numbers that go into the report, so those travel with the repository. The
+# per-sample eval.csv and the pdb/ structures stay out - 100 structures per set is not repo data.
+!results/eval/
+results/eval/*
+!results/eval/*/
+results/eval/*/*
+!results/eval/*/summary.csv
