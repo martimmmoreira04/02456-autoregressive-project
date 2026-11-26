@@ -1,0 +1,4 @@
+weights: weights/transformer_best.pt
+hardware: mps
+test_data: data/test.csv
+batch_size: 32
