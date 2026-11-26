@@ -5,7 +5,6 @@ import torch
 from torch import nn
 import torch.nn.functional as F
 import math
-from protgen.models.transformer_freeze import load_frozen_transformer
 
 class SinusoidPositionalEncoding(nn.Module): # https://medium.com/@uzbrainai/transformers-and-sequence-order-sinusoidal-vs-learned-positional-embeddings-b3802df5ce24
     def __init__(
