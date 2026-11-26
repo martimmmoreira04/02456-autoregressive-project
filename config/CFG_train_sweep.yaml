@@ -1,0 +1,25 @@
+# Run from the repository root:
+# PYTHONPATH=src uv run python scripts/CFG/CFG_train.py -m
+
+model_layout:
+  embedding_size: 32
+  num_heads: 4
+  num_layers: 2
+
+training_parameters:
+  epochs: 30
+  batch_size: 32
+  seed: 42
+  lr: 0.001
+  label_dropout: 0.1
+
+# Use mps on your Mac, cuda on an NVIDIA machine, or cpu.
+hardware: mps
+
+hydra:
+  sweep:
+    dir: hydra_results/training/CFG_train_sweep_${now:%m-%d_%H-%M-%S}
+    subdir: dropout_${training_parameters.label_dropout}
+  sweeper:
+    params:
+      training_parameters.label_dropout: "0.05,0.1,0.2"
