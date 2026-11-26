@@ -1,5 +1,3 @@
-from networkx import config
-
 import hydra
 from hydra.core.hydra_config import HydraConfig
 
@@ -48,8 +46,7 @@ def main(config):
     val_losses=[]
     train_losses = [] 
     output_dir=HydraConfig.get().runtime.output_dir # get output dir from hydra for the run
-    Path(output_dir, "weights").mkdir()
-
+    Path(output_dir, "weights").mkdir(parents=True, exist_ok=True)
 
     # check if summaries are initialized, init if not
     epoch_index = range(1, num_epochs + 1) # index for creating init file-.
@@ -62,7 +59,7 @@ def main(config):
         pd.DataFrame(index=epoch_index).to_csv(val_summ_path, index_label="epoch")
 
 
-
+    best_val = float("inf")
     for epoch in range(num_epochs):
         
         ### Training
@@ -81,8 +78,8 @@ def main(config):
         train_losses.append(train_loss)
 
         # save weights for each epoch 
-        checkpoint = {"weights": model.state_dict(), "embedding_size": config.model_layout.embedding_size, "num_heads": config.model_layout.num_heads, "num_layers": config.model_layout.num_layers, "dropout": config.model_layout.dropout}
-        torch.save(checkpoint, f"{output_dir}/weights/epoch_{epoch+1}.pt")
+        #checkpoint = {"weights": model.state_dict(), "embedding_size": config.model_layout.embedding_size, "num_heads": config.model_layout.num_heads, "num_layers": config.model_layout.num_layers, "dropout": config.model_layout.dropout}
+        #torch.save(checkpoint, f"{output_dir}/weights/epoch_{epoch+1}.pt")
 
         # validation
         model.eval()
@@ -97,9 +94,26 @@ def main(config):
         val_loss = total / len(val_loader)
         val_losses.append(val_loss)
 
-    # SAVE RESULTS
+
+    ### Save checkpoint (everything needed to rebuild the model)
+        checkpoint = {
+            "weights": model.state_dict(),
+            "vocabulary_size": 23,
+            "embedding_size": config.model_layout.embedding_size,
+            "num_heads": config.model_layout.num_heads,
+            "num_layers": config.model_layout.num_layers,
+            "dropout": dropout,
+            "epoch": epoch + 1,
+            "val_loss": val_loss,
+        }
+        torch.save(checkpoint, f"{output_dir}/weights/epoch_{epoch+1}.pt")
+        if val_loss < best_val:
+            best_val = val_loss
+            torch.save(checkpoint, f"{output_dir}/weights/best.pt")
+
+    # SAE RESULTS
     # define name and path
-    col_name = (f"emb{config.model_layout.embedding_size}" f"_h{config.model_layout.num_heads}" f"_L{config.model_layout.num_layers}" f"_{config.training_parameters.hyper_run}" f"_d{config.model_layout.dropout}")
+    col_name = (f"emb{config.model_layout.embedding_size}_h{config.model_layout.num_heads}" f"_L{config.model_layout.num_layers}_{config.training_parameters.hyper_run}_d{dropout}")    
     train_losses_path = f"{output_dir}/train_loss.csv"
     val_losses_path = f"{output_dir}/val_loss.csv"
     # rename col 
