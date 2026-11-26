@@ -1,28 +1,77 @@
-# Best model from transformer_train_sweep_11-25_19-41-41 (val loss 1.4894 @ epoch 19)
-# run with:
-#   PYTHONPATH=src uv run python scripts/transformer/transformer_train.py --config-name=transformer_best
+# Martim R - based on the MLP_train_sweep
+# run with 
+#         PYTHONPATH=src uv run python scripts/transformer/transformer_train.py --config-name=transformer_train_sweep -m
+# make sure the command is run from repository root!! either when done manually and when done on hpc. 
 
+# model structure.
 model_layout:
-  embedding_size: 128
+  embedding_size: 24
   num_heads:      4
-  num_layers:     4
-  dropout:        0.1
+  num_layers:     2
 
+# unchanged hyperparameters
 training_parameters:
-  epochs: 20
+  epochs: 20 #is 20 an appropriate value? 
   batch_size: 32
   seed: 42
-  hyper_run: adamW_003
+  hyper_run: adamW_001
   optimizer: ${Hyper[${training_parameters.hyper_run}].optimizer}
   lr:        ${Hyper[${training_parameters.hyper_run}].lr}
 
-hardware: mps   # 'cuda' on HPC (the winning run was on cuda)
+# specify hardware!! 
+# just so we can use the GPU's and not wait so much 
+  # 'cuda' for nvidia GPU's 
+  # 'mps' for apple 
+hardware: mps
 
 Hyper:
+  sgd_001:
+    optimizer: SGD
+    lr: 0.001
+
+  sgd_005:
+    optimizer: SGD
+    lr: 0.005
+
+  sgd_01:
+    optimizer: SGD
+    lr: 0.01
+
+  #ADAM OPTIMIZERS
+  adam_0003:
+    optimizer: Adam
+    lr: 0.0003
+
+  adam_001:
+    optimizer: Adam
+    lr: 0.001
+
+  adam_003:
+    optimizer: Adam
+    lr: 0.003
+    
+  #ADAM_W OPTIMIZERS
+  adamW_0003:
+    optimizer: AdamW
+    lr: 0.0003
+
+  adamW_001:
+    optimizer: AdamW
+    lr: 0.001
+
   adamW_003:
     optimizer: AdamW
     lr: 0.003
 
+# OUTPUT PATH 
+#     - this creates a folder of the date and time for the run initialized. 
+#     - then it creates a folder with results for each run inside. 
 hydra:
-  run:
-    dir: hydra_results/training/transformer_best/${now:%m-%d_%H-%M-%S}
+  sweep:
+    dir: hydra_results/training/transformer_train_sweep_${now:%m-%d_%H-%M-%S}
+    subdir: emb${model_layout.embedding_size}_h${model_layout.num_heads}_L${model_layout.num_layers}/${training_parameters.hyper_run}
+  sweeper:
+    params:
+      training_parameters.hyper_run: sgd_001,sgd_005,sgd_01,adam_0003,adam_001,adam_003,adamW_0003,adamW_001,adamW_003
+      model_layout.embedding_size: 24,64,128
+      model_layout.num_layers: 2,4
