@@ -1,0 +1,6 @@
+weights: weights/transformer_best.pt
+hardware: mps
+num_samples: 100
+max_length: 127
+temperature: 1.2
+seed: 42
