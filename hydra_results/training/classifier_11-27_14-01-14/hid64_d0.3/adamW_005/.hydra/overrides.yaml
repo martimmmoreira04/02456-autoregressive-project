@@ -1,0 +1,4 @@
+- model_layout.hidden_units=64
+- model_layout.dropout=0.3
+- training_parameters.hyper_run=adamW_005
+- hardware=cuda
