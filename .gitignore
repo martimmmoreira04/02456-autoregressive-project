@@ -260,3 +260,7 @@ results/eval/*
 !results/eval/*/
 results/eval/*/*
 !results/eval/*/summary.csv
+
+# The structural comparison outputs: summary table, per-structure data, figure and run settings.
+# Under 1 MB in total and all of it is report material.
+!results/structure_comparison*/

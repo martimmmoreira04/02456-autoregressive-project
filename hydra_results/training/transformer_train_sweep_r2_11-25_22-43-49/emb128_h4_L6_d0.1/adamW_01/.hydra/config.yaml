@@ -1,0 +1,32 @@
+model_layout:
+  embedding_size: 128
+  dropout: 0.1
+  num_heads: 4
+  num_layers: 6
+training_parameters:
+  epochs: 30
+  batch_size: 32
+  seed: 42
+  hyper_run: adamW_01
+  optimizer: ${Hyper[${training_parameters.hyper_run}].optimizer}
+  lr: ${Hyper[${training_parameters.hyper_run}].lr}
+hardware: cuda
+Hyper:
+  adam_005:
+    optimizer: Adam
+    lr: 0.005
+  adam_01:
+    optimizer: Adam
+    lr: 0.01
+  adam_003:
+    optimizer: Adam
+    lr: 0.003
+  adamW_003:
+    optimizer: AdamW
+    lr: 0.003
+  adamW_005:
+    optimizer: AdamW
+    lr: 0.005
+  adamW_01:
+    optimizer: AdamW
+    lr: 0.01

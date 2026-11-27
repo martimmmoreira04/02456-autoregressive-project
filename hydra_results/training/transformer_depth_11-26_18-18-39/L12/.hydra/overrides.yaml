@@ -1,0 +1,2 @@
+- model_layout.num_layers=12
+- hardware=cuda
