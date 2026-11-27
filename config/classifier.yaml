@@ -1,3 +1,5 @@
+#PYTHONPATH=src uv run python scripts/Guidance/classifier_train.py \--config-name=classifier hardware=mps training_parameters.epochs=1
+
 frozen_weights: weights/transformer_best.pt
 
 model_layout:
@@ -14,6 +16,23 @@ training_parameters:
 
 hardware:  mps     # 'cuda' on HPC
 
+Hyper:
+  adam_001:
+    optimizer: Adam
+    lr: 0.001
+
+  adam_003:
+    optimizer: Adam
+    lr: 0.003
+
+  adamW_003:
+    optimizer: AdamW
+    lr: 0.003
+
+  adamW_005:
+    optimizer: AdamW
+    lr: 0.005
+
 hydra:
   sweep:
     dir: hydra_results/training/classifier_${now:%m-%d_%H-%M-%S}
@@ -22,4 +41,4 @@ hydra:
     params:
       model_layout.hidden_units: 64,128,256
       model_layout.dropout: 0.0,0.1,0.3
-      training_parameters.hyper_run: adamW_003,adamW_005,adam_003, adam_001
+      training_parameters.hyper_run: adamW_003,adamW_005,adam_003,adam_001
