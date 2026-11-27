@@ -5,7 +5,7 @@ from torch import nn
 
 
 class FamilyHead(nn.Module):
-    def __init__(self, frozen_transformer, embedding_size, hidden_units, num_families=3):
+    def __init__(self, frozen_transformer, embedding_size, hidden_units, num_families=3, dropout=0.1):
         super().__init__()
 
         # gotta take the optimal transformer we found
@@ -17,8 +17,14 @@ class FamilyHead(nn.Module):
         self.head = nn.Sequential(
                 nn.Linear(embedding_size, hidden_units),
                 nn.GELU(),
+                nn.Dropout(dropout),
                 nn.Linear(hidden_units, num_families),
             )
+
+    def train(self, mode=True):
+        super().train(mode)
+        self.frozen_transformer.eval()
+        return self
 
     def forward(self, x):
         self.frozen_transformer.eval()
@@ -26,7 +32,7 @@ class FamilyHead(nn.Module):
         with torch.no_grad():
             outputs = self.frozen_transformer(x, return_hidden=True)
 
-        h = outputs[1]                   # Gives me the hidden states without retweaking
+            h = outputs[1]
 
         family_class = self.head(h)     #save scores for 3
         return family_class
